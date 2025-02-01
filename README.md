@@ -25,7 +25,7 @@ This is my submission for the [Hackclub Neon](https://neon.hackclub.com) YSWS! I
 
 ### Standard Lib
 
-Neon comes with a standard library of graphics primitives to help you get started quickly. Here are the key functions with example usage:
+My project comes with a standard library of graphics primitives to help you get started quickly. Here are the key functions with example usage:
 
 ```python
 # Drawing rectangles
