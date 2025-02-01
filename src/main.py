@@ -7,50 +7,7 @@ from graphics import Graphics
 from wakatime import get_wakatime_stats
 import math
 
-def main():
-    print("Hello, world!")
-
-    # Initialize display and graphics
-    display, bitmap, palette = init_display()
-    graphics = Graphics(bitmap, palette)
-
-    # Draw example shapes
-    graphics.fill(COLORS["background"])
-    graphics.draw_rectangle(5, 5, 20, 10, COLORS["bar"])
-    graphics.draw_circle(40, 16, 8, COLORS["circle"])
-    graphics.draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])
-    graphics.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])
-    graphics.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)
-    graphics.draw_text(3, 21, "3.2", COLORS["text"], 1)
-    # Update display
-    display.refresh()
-
-    print("Display functioning!")
-
-    # Get wakatime stats for the last week
-    data = get_wakatime_stats(7)
-
-    print("got data")
-
-    sleep(1)
-
-    graphics.fill(COLORS["background"])
-
-    # Get project percentages
-    total_time = sum(day["total_sum"] for day in data)
-    projects = {}
-    for day in data:
-        for project in day["projects"]:
-            project_key = project["key"]
-            if project_key in projects:
-                projects[project_key] += project["total"]
-            else:
-                projects[project_key] = project["total"]
-
-    # Sort projects by time
-    sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
-
-    # Draw pie chart
+def draw_pie_chart(graphics, display, sorted_projects, total_time):
     center_x = 16
     center_y = 16
     radius = 15
@@ -110,6 +67,91 @@ def main():
         sleep(1)
 
         start_angle = end_angle
+
+def draw_daily_bar_chart(graphics, display, data):
+    max_time = max(day["total_sum"] for day in data)
+    # display coding time for each day
+    def draw_bars(delay = 0.0):
+        graphics.fill(COLORS["background"])
+        for i, day in enumerate(data):
+            # get the percentage of coding time for the day
+            percentage = day["total_sum"] / max_time
+            # draw the bar
+            graphics.draw_rectangle(i*9, 32-int(percentage * 30), 8, 31, COLORS["bar"])
+            if delay > 0:
+                display.refresh()
+                sleep(delay)
+
+    draw_bars(0.1)
+
+    # display the time spent coding for each day
+    for i, day in enumerate(data):
+        draw_bars()
+
+        # get the percentage of coding time for the day
+        percentage = day["total_sum"] / max_time
+
+        points = []
+        points.append((i*9, 32-int(percentage * 30)))
+        points.append((i*9, 31))
+        points.append((i*9+7, 31))
+        points.append((i*9+7, 32-int(percentage * 30)))
+
+        graphics.draw_polygon(points, COLORS["text"], False)
+
+        graphics.draw_text(22, 16, str(round(day["total_sum"] / 3600, 1)), COLORS["text"], 1)
+
+        display.refresh()
+        sleep(1)
+
+def main():
+    print("Hello, world!")
+
+    # Initialize display and graphics
+    display, bitmap, palette = init_display()
+    graphics = Graphics(bitmap, palette)
+
+    # Draw example shapes
+    graphics.fill(COLORS["background"])
+    graphics.draw_rectangle(5, 5, 20, 10, COLORS["bar"])
+    graphics.draw_circle(40, 16, 8, COLORS["circle"])
+    graphics.draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])
+    graphics.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])
+    graphics.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)
+    graphics.draw_text(3, 21, "3.2", COLORS["text"], 1)
+    # Update display
+    display.refresh()
+
+    print("Display functioning!")
+
+    # Get wakatime stats for the last week
+    data = get_wakatime_stats(7)
+
+    print("got data")
+
+    sleep(1)
+
+    graphics.fill(COLORS["background"])
+
+    # Get project percentages
+    total_time = sum(day["total_sum"] for day in data)
+    projects = {}
+    for day in data:
+        for project in day["projects"]:
+            project_key = project["key"]
+            if project_key in projects:
+                projects[project_key] += project["total"]
+            else:
+                projects[project_key] = project["total"]
+
+    # Sort projects by time
+    sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
+
+    # Draw the pie chart
+    draw_pie_chart(graphics, display, sorted_projects, total_time)
+
+    # Draw the daily activity chart
+    draw_daily_bar_chart(graphics, display, data)
 
 if __name__ == "__main__":
     main()
