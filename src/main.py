@@ -37,7 +37,7 @@ def draw_pie_chart(graphics, display, sorted_projects, total_time):
 
         start_angle = end_angle
 
-    sleep(2)
+    sleep(0.1)
 
     # do the same but use text color and false for filled as well as draw text
     start_angle = -math.pi/9  # Reset start angle for second pass
@@ -130,6 +130,7 @@ def main():
 
     while True:
         data = get_wakatime_stats(7)
+        print("Fetched new data")
 
         # Get project percentages
         total_time = sum(day["total_sum"] for day in data)
