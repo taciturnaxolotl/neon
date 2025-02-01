@@ -28,29 +28,34 @@ This is my submission for the [Hackclub Neon](https://neon.hackclub.com) YSWS! I
 My project comes with a standard library of graphics primitives to help you get started quickly. Here are the key functions with example usage:
 
 ```python
+from graphics import Graphics
+
+# Initialize the display
+graphics = Graphics()
+
+# Drawing lines
+graphics.draw_line(0, 0, 63, 31, COLORS["line"])  # x1, y1, x2, y2, color
+
 # Drawing rectangles
-draw_rectangle(5, 5, 20, 10, COLORS["bar"])  # x, y, width, height, color
+graphics.draw_rectangle(5, 5, 20, 10, COLORS["bar"])  # x, y, width, height, color
 
 # Drawing circles
-draw_circle(40, 16, 8, COLORS["circle"])  # center_x, center_y, radius, color
-
-# Drawing triangles
-draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])  # x1,y1, x2,y2, x3,y3, color
+graphics.draw_circle(40, 16, 8, COLORS["circle"])  # center_x, center_y, radius, color
 
 # Drawing Bezier curves
-draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])  # control points, color
+graphics.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])  # control points, color
 
 # Drawing polygons 
-draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)  # points, color, fill
+graphics.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)  # points, color, fill
 
 # Drawing text
-draw_text(3, 21, "3.2", COLORS["text"], 1)  # x, y, text, color, size
+graphics.draw_text(3, 21, "3.2", COLORS["text"], 1)  # x, y, text, color, size
 
 # Filling the display
-fill(COLORS["background"])  # Fills entire display with color
+graphics.fill(COLORS["background"])  # Fills entire display with color
 
 # Updating the display
-update_display()  # Refreshes display buffer
+graphics.refresh()  # Refreshes display buffer
 ```
 
 The library handles all the low-level matrix display setup including pin configuration and color palette management. Colors are defined using hex values (0xRRGGBB format) and automatically mapped to the 16-bit color space.

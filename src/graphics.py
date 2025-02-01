@@ -13,7 +13,7 @@ class Graphics:
         self.fill(COLORS["background"])
         self.draw_rectangle(5, 5, 20, 10, COLORS["bar"])
         self.draw_circle(40, 16, 8, COLORS["circle"])
-        self.draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])
+        self.draw_polygon([(10, 25), (20, 10), (30, 25)], COLORS["triangle"])
         self.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])
         self.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)
         self.draw_text(3, 21, "3.2", COLORS["text"], 1)
@@ -51,29 +51,6 @@ class Graphics:
             for y in range(cy - radius, cy + radius + 1):
                 if (x - cx)**2 + (y - cy)**2 <= radius**2:
                     self.place(x, y, color)
-
-    def draw_triangle(self, x1, y1, x2, y2, x3, y3, color):
-        def draw_line(x0, y0, x1, y1):
-            dx = abs(x1 - x0)
-            dy = abs(y1 - y0)
-            sx = 1 if x0 < x1 else -1
-            sy = 1 if y0 < y1 else -1
-            err = dx - dy
-            while True:
-                self.place(x0, y0, color)
-                if x0 == x1 and y0 == y1:
-                    break
-                e2 = 2 * err
-                if e2 > -dy:
-                    err -= dy
-                    x0 += sx
-                if e2 < dx:
-                    err += dx
-                    y0 += sy
-
-        draw_line(x1, y1, x2, y2)
-        draw_line(x2, y2, x3, y3)
-        draw_line(x3, y3, x1, y1)
 
     def draw_curve(self, points, color):
         def interpolate(t, p0, p1):
