@@ -69,3 +69,56 @@ class Graphics:
                 x = interpolate(t, x, points[j][0])
                 y = interpolate(t, y, points[j][1])
             self.place(int(x), int(y), color)
+
+    def draw_polygon(self, points, color, filled=False):
+        # Draw outline
+        for i in range(len(points)):
+            x1, y1 = points[i]
+            x2, y2 = points[(i + 1) % len(points)]
+            def draw_line(x0, y0, x1, y1):
+                dx = abs(x1 - x0)
+                dy = abs(y1 - y0)
+                sx = 1 if x0 < x1 else -1
+                sy = 1 if y0 < y1 else -1
+                err = dx - dy
+                while True:
+                    self.place(x0, y0, color)
+                    if x0 == x1 and y0 == y1:
+                        break
+                    e2 = 2 * err
+                    if e2 > -dy:
+                        err -= dy
+                        x0 += sx
+                    if e2 < dx:
+                        err += dx
+                        y0 += sy
+            draw_line(x1, y1, x2, y2)
+
+        # Fill polygon if requested
+        if filled:
+            # Find bounding box
+            min_x = min(p[0] for p in points)
+            max_x = max(p[0] for p in points)
+            min_y = min(p[1] for p in points)
+            max_y = max(p[1] for p in points)
+
+            # Scan each row
+            for y in range(min_y, max_y + 1):
+                intersections = []
+                # Find intersections with all edges
+                for i in range(len(points)):
+                    x1, y1 = points[i]
+                    x2, y2 = points[(i + 1) % len(points)]
+                    if (y1 <= y < y2) or (y2 <= y < y1):
+                        if y2 - y1 != 0:
+                            x = x1 + (x2 - x1) * (y - y1) / (y2 - y1)
+                            intersections.append(int(x))
+
+                # Sort intersections
+                intersections.sort()
+
+                # Fill between pairs of intersections
+                for i in range(0, len(intersections), 2):
+                    if i + 1 < len(intersections):
+                        for x in range(intersections[i], intersections[i + 1] + 1):
+                            self.place(x, y, color)
