@@ -1,11 +1,24 @@
 # graphics.py
 from font import font8x8_numbers
+from config import COLORS
+from display import init_display
 
 class Graphics:
-    def __init__(self, bitmap, palette):
-        self.bitmap = bitmap
-        self.palette = palette
+    def __init__(self):
         self.color_map = {}
+
+        self.display, self.bitmap, self.palette = init_display()
+
+        # Draw example shapes
+        self.fill(COLORS["background"])
+        self.draw_rectangle(5, 5, 20, 10, COLORS["bar"])
+        self.draw_circle(40, 16, 8, COLORS["circle"])
+        self.draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])
+        self.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])
+        self.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)
+        self.draw_text(3, 21, "3.2", COLORS["text"], 1)
+        # Update display
+        self.refresh()
 
     def _get_index_for(self, color):
         if color in self.color_map:
@@ -18,6 +31,9 @@ class Graphics:
     def place(self, x, y, color):
         if 0 <= x < self.bitmap.width and 0 <= y < self.bitmap.height:
             self.bitmap[x, y] = self._get_index_for(color)
+
+    def refresh(self):
+        self.display.refresh()
 
     def fill(self, color):
         index = self._get_index_for(color)

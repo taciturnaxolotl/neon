@@ -2,12 +2,11 @@
 import requests
 from time import sleep
 from config import COLORS
-from display import init_display
 from graphics import Graphics
 from wakatime import get_wakatime_stats
 import math
 
-def draw_pie_chart(graphics, display, sorted_projects, total_time):
+def draw_pie_chart(graphics, sorted_projects, total_time):
     graphics.fill(COLORS["background"])
 
     center_x = 16
@@ -32,7 +31,7 @@ def draw_pie_chart(graphics, display, sorted_projects, total_time):
 
         # Draw slice
         graphics.draw_polygon(points, pie_colors[i % len(pie_colors)], True)
-        display.refresh()
+        graphics.refresh()
         sleep(0.1)
 
         start_angle = end_angle
@@ -61,7 +60,7 @@ def draw_pie_chart(graphics, display, sorted_projects, total_time):
         # clear a space for the text
         graphics.draw_rectangle(38, 16, 46, 36, COLORS["background"])
         graphics.draw_text(38, center_y, str(hours), COLORS["text"], 1)
-        display.refresh()
+        graphics.refresh()
 
         # clear highlight
         graphics.draw_polygon(points, COLORS["pie"][i], True)
@@ -70,7 +69,7 @@ def draw_pie_chart(graphics, display, sorted_projects, total_time):
 
         start_angle = end_angle
 
-def draw_daily_bar_chart(graphics, display, data):
+def draw_daily_bar_chart(graphics, data):
     max_time = max(day["total_sum"] for day in data)
     # display coding time for each day
     def draw_bars(delay = 0.0):
@@ -81,7 +80,7 @@ def draw_daily_bar_chart(graphics, display, data):
             # draw the bar
             graphics.draw_rectangle(i*9, 32-int(percentage * 30), 8, 31, COLORS["bar"])
             if delay > 0:
-                display.refresh()
+                graphics.refresh()
                 sleep(delay)
 
     draw_bars(0.1)
@@ -103,26 +102,14 @@ def draw_daily_bar_chart(graphics, display, data):
 
         graphics.draw_text(22, 16, str(round(day["total_sum"] / 3600, 1)), COLORS["text"], 1)
 
-        display.refresh()
+        graphics.refresh()
         sleep(1)
 
 def main():
     print("Hello, world!")
 
     # Initialize display and graphics
-    display, bitmap, palette = init_display()
-    graphics = Graphics(bitmap, palette)
-
-    # Draw example shapes
-    graphics.fill(COLORS["background"])
-    graphics.draw_rectangle(5, 5, 20, 10, COLORS["bar"])
-    graphics.draw_circle(40, 16, 8, COLORS["circle"])
-    graphics.draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])
-    graphics.draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])
-    graphics.draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)
-    graphics.draw_text(3, 21, "3.2", COLORS["text"], 1)
-    # Update display
-    display.refresh()
+    graphics = Graphics()
 
     print("Display functioning!")
 
@@ -147,10 +134,10 @@ def main():
         sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
 
         # Draw the pie chart
-        draw_pie_chart(graphics, display, sorted_projects, total_time)
+        draw_pie_chart(graphics, sorted_projects, total_time)
 
         # Draw the daily activity chart
-        draw_daily_bar_chart(graphics, display, data)
+        draw_daily_bar_chart(graphics, data)
 
 if __name__ == "__main__":
     main()
