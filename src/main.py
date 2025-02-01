@@ -5,6 +5,7 @@ from config import COLORS
 from display import init_display
 from graphics import Graphics
 from wakatime import get_wakatime_stats
+import math
 
 def main():
     print("Hello, world!")
@@ -34,18 +35,47 @@ def main():
 
     graphics.fill(COLORS["background"])
 
-    # display bar graph of coding time over the last week
-    max_height = 30  # Maximum display height
-    max_time = max(day["total_sum"] for day in data)
-    scale_factor = max_height / max_time if max_time > 0 else 1
+    # Get project percentages
+    total_time = sum(day["total_sum"] for day in data)
+    projects = {}
+    for day in data:
+        for project in day["projects"]:
+            project_key = project["key"]
+            if project_key in projects:
+                projects[project_key] += project["total"]
+            else:
+                projects[project_key] = project["total"]
 
-    for i, day in enumerate(data):
-        x = 5 + i * 10
-        y = 30
-        height = int(day["total_sum"] * scale_factor)
-        graphics.draw_rectangle(x, y - height, 8, height, COLORS["bar"])
+    # Sort projects by time
+    sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
+
+    # Draw pie chart
+    center_x = 32
+    center_y = 16
+    radius = 15
+    start_angle = 0
+
+    # Draw slices for top 5 projects
+    pie_colors = COLORS["pie"]
+    for i, (project, time) in enumerate(sorted_projects[:5]):
+        percentage = time / total_time
+        end_angle = start_angle + (2 * math.pi * percentage)
+
+        # Calculate arc points
+        points = []
+        points.append((center_x, center_y))
+        for angle in [a/10.0 for a in range(int(start_angle*10), int(end_angle*10))]:
+            x = center_x + int(radius * math.cos(angle))
+            y = center_y + int(radius * math.sin(angle))
+            points.append((x, y))
+        points.append((center_x, center_y))
+
+        # Draw slice
+        graphics.draw_polygon(points, pie_colors[i % len(pie_colors)], True)
         display.refresh()
         sleep(0.1)
+
+        start_angle = end_angle
 
 if __name__ == "__main__":
     main()
