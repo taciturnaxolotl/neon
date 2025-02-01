@@ -8,6 +8,8 @@ from wakatime import get_wakatime_stats
 import math
 
 def draw_pie_chart(graphics, display, sorted_projects, total_time):
+    graphics.fill(COLORS["background"])
+
     center_x = 16
     center_y = 16
     radius = 15
@@ -124,34 +126,30 @@ def main():
 
     print("Display functioning!")
 
-    # Get wakatime stats for the last week
-    data = get_wakatime_stats(7)
-
-    print("got data")
-
     sleep(1)
 
-    graphics.fill(COLORS["background"])
+    while True:
+        data = get_wakatime_stats(7)
 
-    # Get project percentages
-    total_time = sum(day["total_sum"] for day in data)
-    projects = {}
-    for day in data:
-        for project in day["projects"]:
-            project_key = project["key"]
-            if project_key in projects:
-                projects[project_key] += project["total"]
-            else:
-                projects[project_key] = project["total"]
+        # Get project percentages
+        total_time = sum(day["total_sum"] for day in data)
+        projects = {}
+        for day in data:
+            for project in day["projects"]:
+                project_key = project["key"]
+                if project_key in projects:
+                    projects[project_key] += project["total"]
+                else:
+                    projects[project_key] = project["total"]
 
-    # Sort projects by time
-    sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
+        # Sort projects by time
+        sorted_projects = sorted(projects.items(), key=lambda x: x[1], reverse=True)
 
-    # Draw the pie chart
-    draw_pie_chart(graphics, display, sorted_projects, total_time)
+        # Draw the pie chart
+        draw_pie_chart(graphics, display, sorted_projects, total_time)
 
-    # Draw the daily activity chart
-    draw_daily_bar_chart(graphics, display, data)
+        # Draw the daily activity chart
+        draw_daily_bar_chart(graphics, display, data)
 
 if __name__ == "__main__":
     main()
