@@ -8,7 +8,9 @@ COLORS = {
     ],
     "circle": 0xFF6347,
     "triangle": 0xFFD700,
-    "curve": 0x1E90FF
+    "curve": 0x1E90FF,
+    "polygon": 0x00FF00,
+    "text": 0xFFFFFF
 }
 
 SCALE = 1

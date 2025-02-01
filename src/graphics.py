@@ -1,4 +1,6 @@
 # graphics.py
+from font import font8x8_numbers
+
 class Graphics:
     def __init__(self, bitmap, palette):
         self.bitmap = bitmap
@@ -122,3 +124,36 @@ class Graphics:
                     if i + 1 < len(intersections):
                         for x in range(intersections[i], intersections[i + 1] + 1):
                             self.place(x, y, color)
+
+    def draw_text(self, x, y, text, color, scale=1):
+        cursor_x = int(x)
+        cursor_y = int(y)
+
+        # Convert text to string if it's an integer
+        text = str(text)
+
+        for char in text:
+            if char in font8x8_numbers:
+                char_data = font8x8_numbers[char]
+
+                # Find actual width of character (exclude trailing empty columns)
+                char_width = 8 if char != '.' else 4
+                if char != '.':
+                    for col in reversed(range(8)):
+                        if any(char_data[row][col] for row in range(8)):
+                            break
+                        char_width -= 1
+
+                for row in range(8):
+                    for col in range(char_width):
+                        if char_data[row][col]:
+                            for sx in range(scale):
+                                for sy in range(scale):
+                                    self.place(int(cursor_x + (col * scale) + sx),
+                                             int(cursor_y + (row * scale) + sy),
+                                             color)
+
+                cursor_x += (char_width + 1) * scale  # Move cursor for next character with 1px spacing
+            elif char == '\n':
+                cursor_y += 8 * scale  # Move to next line
+                cursor_x = int(x)  # Reset x position
