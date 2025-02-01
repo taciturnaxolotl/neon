@@ -29,22 +29,25 @@ My project comes with a standard library of graphics primitives to help you get 
 
 ```python
 # Drawing rectangles
-draw_rectangle(5, 5, 20, 10, 0x26A641)  # x, y, width, height, color
+draw_rectangle(5, 5, 20, 10, COLORS["bar"])  # x, y, width, height, color
 
 # Drawing circles
-draw_circle(40, 16, 8, 0xFF6347)  # center_x, center_y, radius, color
+draw_circle(40, 16, 8, COLORS["circle"])  # center_x, center_y, radius, color
 
 # Drawing triangles
-draw_triangle(10, 25, 20, 10, 30, 25, 0xFFD700)  # x1,y1, x2,y2, x3,y3, color
+draw_triangle(10, 25, 20, 10, 30, 25, COLORS["triangle"])  # x1,y1, x2,y2, x3,y3, color
 
 # Drawing Bezier curves
-draw_curve([(0, 0), (4,25), (63, 31)], 0x1E90FF)  # control points, color
+draw_curve([(0, 0), (4,25), (63, 31)], COLORS["curve"])  # control points, color
 
-# Setting individual pixels
-place(x, y, color)  # Places a single pixel
+# Drawing polygons 
+draw_polygon([(45, 16), (40, 32), (63, 31)], COLORS["polygon"], True)  # points, color, fill
+
+# Drawing text
+draw_text(3, 21, "3.2", COLORS["text"], 1)  # x, y, text, color, size
 
 # Filling the display
-fill(0x161B22)  # Fills entire display with color
+fill(COLORS["background"])  # Fills entire display with color
 
 # Updating the display
 update_display()  # Refreshes display buffer
