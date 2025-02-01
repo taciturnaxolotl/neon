@@ -23,6 +23,39 @@
 
 This is my submission for the [Hackclub Neon](https://neon.hackclub.com) YSWS! I cycled through quite a few ideas before settling on a hackatime dashboard! It's a simple, clean, and minimalistic dashboard that displays the time coding for the day!
 
+### Standard Lib
+
+Neon comes with a standard library of graphics primitives to help you get started quickly. Here are the key functions with example usage:
+
+```python
+# Drawing rectangles
+draw_rectangle(5, 5, 20, 10, 0x26A641)  # x, y, width, height, color
+
+# Drawing circles
+draw_circle(40, 16, 8, 0xFF6347)  # center_x, center_y, radius, color
+
+# Drawing triangles
+draw_triangle(10, 25, 20, 10, 30, 25, 0xFFD700)  # x1,y1, x2,y2, x3,y3, color
+
+# Drawing Bezier curves
+draw_curve([(0, 0), (4,25), (63, 31)], 0x1E90FF)  # control points, color
+
+# Setting individual pixels
+place(x, y, color)  # Places a single pixel
+
+# Filling the display
+fill(0x161B22)  # Fills entire display with color
+
+# Updating the display
+update_display()  # Refreshes display buffer
+```
+
+The library handles all the low-level matrix display setup including pin configuration and color palette management. Colors are defined using hex values (0xRRGGBB format) and automatically mapped to the 16-bit color space.
+
+<p align="center">
+	<img src="https://raw.githubusercontent.com/taciturnaxolotl/neon/master/.github/images/stlib.webp" />
+</p>
+
 <p align="center">
 	<img src="https://raw.githubusercontent.com/taciturnaxolotl/carriage/master/.github/images/line-break.svg" />
 </p>
