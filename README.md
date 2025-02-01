@@ -6,7 +6,7 @@
 </h3>
 
 <p align="center">
-    <i>A train carriage can be anything you want it to be and is a container for storing things so that seems like an appropriate name</i>
+    <i>The bulbs glow a distinctive amber. It's like nostalgia but for something you never had.</i>
 </p>
 
 <p align="center">
