@@ -13,7 +13,7 @@
 	<img src="https://raw.githubusercontent.com/taciturnaxolotl/carriage/master/.github/images/line-break-thin.svg" />
 </p>
 <p align="center">
-	<img src="https://raw.githubusercontent.com/taciturnaxolotl/neon/master/.github/images/demo.webp" />
+	<img src="https://raw.githubusercontent.com/taciturnaxolotl/neon/master/.github/images/demo.gif" />
 </p>
 <p align="center">
 	<img src="https://raw.githubusercontent.com/taciturnaxolotl/carriage/master/.github/images/line-break-thin.svg" />
