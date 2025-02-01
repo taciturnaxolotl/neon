@@ -4,20 +4,7 @@ from time import sleep
 from config import COLORS
 from display import init_display
 from graphics import Graphics
-
-def get_wakatime_stats(day=0):
-    from datetime import datetime, timedelta
-    today = datetime.today()
-    from_date = (today - timedelta(days=day)).strftime('%Y-%m-%d')
-    to_date = (today - timedelta(days=day-1)).strftime('%Y-%m-%d')
-    response = requests.get(
-        "https://waka.hackclub.com/api/summary",
-        params={"user": "U062UG485EE", "from": from_date, "to": to_date},
-        headers={"Authorization": "Bearer 2ce9e698-8a16-46f0-b49a-ac121bcfd608"}
-    )
-    data = response.json()
-    data["total_sum"] = sum([project["total"] for project in data["categories"]])
-    return data
+from wakatime import get_wakatime_stats
 
 def main():
     print("Hello, world!")
@@ -38,14 +25,12 @@ def main():
 
     print("Display functioning!")
 
-    # Get wakatime stats for the last week adding each day to the array
-    data = []
-    for i in range(1, 7):
-        data.append(get_wakatime_stats(i))
+    # Get wakatime stats for the last week
+    data = get_wakatime_stats(7)
 
     print("got data")
 
-    sleep(2)
+    sleep(1)
 
     graphics.fill(COLORS["background"])
 
@@ -55,7 +40,6 @@ def main():
     scale_factor = max_height / max_time if max_time > 0 else 1
 
     for i, day in enumerate(data):
-        print(day["total_sum"])
         x = 5 + i * 10
         y = 30
         height = int(day["total_sum"] * scale_factor)
